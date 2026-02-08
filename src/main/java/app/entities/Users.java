@@ -1,9 +1,6 @@
 package app.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -21,6 +18,9 @@ public class Users
     private String email;
     private String password;
 
+    //look at this later
+    @OneToOne
+    @JoinColumn(name = "privacy_settings_id")
     private PrivacySettings privacySettings;
 
 }
