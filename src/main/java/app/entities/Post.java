@@ -14,6 +14,7 @@ import java.awt.*;
 @Builder
 @ToString
 @Entity
+@Data
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

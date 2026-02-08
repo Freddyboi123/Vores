@@ -3,13 +3,15 @@ package app.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Data
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString
 @Entity
-public class Users
+@Table(name = "users")
+public class User
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,9 +20,12 @@ public class Users
     private String email;
     private String password;
 
-    //look at this later
-    @OneToOne
-    @JoinColumn(name = "privacy_settings_id")
-    private PrivacySettings privacySettings;
+
+    @Override
+    public String toString() {
+        return "User: " +  name + "\n" +
+                "Email: " + email + "\n" +
+                "Password: " + password;
+    }
 
 }
