@@ -9,6 +9,6 @@ final class EntityRegistry {
 
     static void registerEntities(Configuration configuration) {
         //configuration.addAnnotatedClass(Point.class);
-        // TODO: Add more entities here...
+
     }
 }
