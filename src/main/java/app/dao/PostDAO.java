@@ -59,7 +59,7 @@ public class PostDAO {
     public void deletePost(int id) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            Post post =  getPost(id);
+            Post post =  em.find(Post.class, id);
             em.remove(post);
             em.getTransaction().commit();
             System.out.println("Post successfully deleted with id " + id);

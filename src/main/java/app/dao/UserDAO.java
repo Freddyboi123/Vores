@@ -62,7 +62,7 @@ public class UserDAO {
     public void deleteUser(int id) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            User user = getUser(id);
+            User user =     em.find(User.class, id);
             em.remove(user);
             em.getTransaction().commit();
             System.out.println("User successfully deleted with id " + id);

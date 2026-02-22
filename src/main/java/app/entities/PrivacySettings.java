@@ -1,9 +1,6 @@
 package app.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -17,8 +14,17 @@ public class PrivacySettings {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer userId;
+    @OneToOne(mappedBy = "privacySettings")
+    private User userId;
     private boolean isProfilePublic;
     private boolean isPostsPublic;
     private boolean isFriendsListPublic;
+
+
+    public PrivacySettings(boolean isProfilePublic, boolean isPostsPublic, boolean isFriendsListPublic) {
+        this.isProfilePublic = isProfilePublic;
+        this.isPostsPublic = isPostsPublic;
+        this.isFriendsListPublic = isFriendsListPublic;
+
+    }
 }

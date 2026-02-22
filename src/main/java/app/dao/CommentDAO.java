@@ -58,7 +58,7 @@ public class CommentDAO {
     public void deleteComment(int id) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            Comment comment =  getComment(id);
+            Comment comment =  em.find(Comment.class, id);
             em.remove(comment);
             em.getTransaction().commit();
             System.out.println("Comment successfully deleted with id " + id);
