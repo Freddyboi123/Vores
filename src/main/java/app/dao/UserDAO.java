@@ -10,6 +10,7 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
 import javax.management.relation.Role;
+import java.util.Map;
 
 public class UserDAO implements ISecurityDAO {
 
@@ -40,9 +41,8 @@ public class UserDAO implements ISecurityDAO {
             if (foundUser.verifyPassword(password)){
                 return foundUser;
             } else {
-                throw new ValidationException("User could not be validated");
+                throw new ValidationException(Map.of());
             }
-            return query.getSingleResult();
         } catch (NoResultException e) {
             System.out.println("No user was found with the username: " + username);
             return null;

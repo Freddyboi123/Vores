@@ -1,29 +1,33 @@
 package app;
 
 import app.config.Hibernate.HibernateConfig;
-import app.dao.UserDAO;
-import app.entities.Roles;
-import app.entities.User;
-import app.utils.WeatherApiHandler.WeatherApi;
-import app.entities.Weather.WeeklyForcast;
-import jakarta.persistence.EntityManagerFactory;
-import org.mindrot.jbcrypt.BCrypt;
+import app.config.security.ApplicationConfig;
+import app.rest.Routes;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import jakarta.persistence.EntityManagerFactory;
 
 
 public class Main {
 
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
 
-
-    public static void main(String[] args) {
-
-
-
-
-
-}}
+        public static void main(String[] args) {
+            Routes routes = new Routes(emf);
+            new ApplicationConfig(emf)
+                    .security()
+//                .route(securityRoutes.getRouteResource("auth"))
+//                .route(securityRoutes.getRouteResource("protected"))
+//                .route(restRoutes.getRouteResource("open/person"))
+                    .route(routes.getRouteResource("msg"))
+                    .route(routes.getRouteResource("auth"))
+//                .route(() -> {
+//                    path("/index", () -> {
+//                        get("/", ctx -> ctx.render("index.html"));
+//                    });
+//                })
+                    .cors()
+                    .exceptions()
+                    .apiExceptions()
+                    .start(7070);
+        }
+    }

@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.config.Hibernate.HibernateConfig;
 import app.config.security.ISecurityController;
 import app.dao.UserDAO;
 
@@ -32,10 +33,10 @@ public class SecurityController implements ISecurityController {
     private ObjectMapper objectMapper = new ObjectMapper();
     private ITokenSecurity tokenSecurity = new TokenSecurity();
 
-
     public SecurityController(EntityManagerFactory emf){
-       this.emf = emf;
+        this.emf = emf;
     }
+
     UserDAO userDAO = new UserDAO(emf);
 
     @Override
