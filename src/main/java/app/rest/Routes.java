@@ -1,5 +1,6 @@
 package app.rest;
 
+import app.config.Hibernate.HibernateConfig;
 import app.controllers.SecurityController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -9,7 +10,7 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Routes {
     ObjectMapper objectMapper = new ObjectMapper();
-    SecurityController securityController = new SecurityController();
+    SecurityController securityController = new SecurityController(HibernateConfig.getEntityManagerFactory());
 
     public EndpointGroup getRouteResource(String resourceName) {
         return switch (resourceName.toLowerCase()) {

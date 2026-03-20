@@ -71,6 +71,18 @@ public class User
        roles.add(role);
     }
 
+    public String getRolesAsString(){
+
+        String rolesAsString = "";
+        for (Roles r : roles){
+            String temp = r.toString();
+            rolesAsString += temp;
+        }
+        return rolesAsString;
+    }
+
+
+
 
     @Override
     public String toString() {

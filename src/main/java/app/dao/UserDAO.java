@@ -30,11 +30,11 @@ public class UserDAO implements ISecurityDAO {
     }
 
     @Override
-    public User getVerifiedUser(String email, String password){
+    public User getVerifiedUser(String username, String password){
         try(EntityManager em = emf.createEntityManager()){
             em.getTransaction().begin();
-            TypedQuery<User> query =  em.createQuery("SELECT u FROM User u WHERE u.email = :userEmail", User.class);
-            query.setParameter("userEmail",email);
+            TypedQuery<User> query =  em.createQuery("SELECT u FROM User u WHERE u.email = :username", User.class);
+            query.setParameter("userEmail",username);
             User foundUser = query.getSingleResult();
 
             if (foundUser.verifyPassword(password)){
@@ -44,7 +44,7 @@ public class UserDAO implements ISecurityDAO {
             }
             return query.getSingleResult();
         } catch (NoResultException e) {
-            System.out.println("No user was found with the email: " + email);
+            System.out.println("No user was found with the username: " + username);
             return null;
         }
         }
