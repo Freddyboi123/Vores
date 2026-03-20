@@ -49,6 +49,7 @@ public class User
         addRole(Roles.USER);
     }
 
+
     public void addComment(Comment comment) {
         comments.add(comment);
         if (comment != null){

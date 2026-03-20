@@ -3,6 +3,8 @@ package app.controllers;
 import app.config.security.ISecurityController;
 import app.dao.UserDAO;
 
+
+import app.dto.UserDTO;
 import app.entities.User;
 import app.exeptions.ApiException;
 import app.utils.Utils;
@@ -11,8 +13,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.bugelhartmann.ITokenSecurity;
 import dk.bugelhartmann.TokenSecurity;
 import dk.bugelhartmann.TokenVerificationException;
-import dk.bugelhartmann.UserDTO;
+//import dk.bugelhartmann.UserDTO;
 import io.javalin.http.Context;
+import io.javalin.http.ForbiddenResponse;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.UnauthorizedResponse;
 import io.javalin.validation.ValidationException;
@@ -20,6 +23,7 @@ import jakarta.persistence.EntityManagerFactory;
 
 import java.text.ParseException;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 public class SecurityController implements ISecurityController {
@@ -39,7 +43,7 @@ public class SecurityController implements ISecurityController {
         UserDTO user = ctx.bodyAsClass(UserDTO.class);
         try{
             User userEntity = userDAO.getVerifiedUser(user.getUsername(), user.getPassword());
-            String token = createToken(new UserDTO(userEntity.getName(),userEntity.getRolesAsString()));
+            String token = createToken(new UserDTO(userEntity.getName(),userEntity.getRolesAsString(),userEntity.getEmail()));
             ObjectNode node = objectMapper.createObjectNode();
 
             ctx.status(200).json(node
@@ -52,21 +56,52 @@ public class SecurityController implements ISecurityController {
 
     @Override
     public void register(Context ctx) {
-
+        UserDTO user = ctx.bodyAsClass(UserDTO.class);
+        userDAO.createUser(new User (user.getUsername(), user.getPassword(),user.getEmail()));
+        ObjectNode node = objectMapper.createObjectNode();
+        node.put("msg","login register successful");
+        ctx.json(node).status(200);
     }
 
     @Override
     public void authenticate(Context ctx) {
+        // This is a preflight request => no need for authentication
+        if (ctx.method().toString().equals("OPTIONS")) {
+            ctx.status(200);
+            return;
+        }
+        // If the endpoint is not protected with roles or is open to ANYONE role, then skip
+        Set<String> allowedRoles = ctx.routeRoles().stream().map(role -> role.toString().toUpperCase()).collect(Collectors.toSet());
+        if (isOpenEndpoint(allowedRoles))
+            return;
 
+        // If there is no token we do not allow entry
+        dk.bugelhartmann.UserDTO verifiedTokenUser = validateAndGetUserFromToken(ctx);
+        ctx.attribute("user", verifiedTokenUser); // -> ctx.attribute("user") in ApplicationConfig beforeMatched filter
     }
 
     @Override
     public void authorize(Context ctx) {
+        Set<String> allowedRoles = ctx.routeRoles()
+                .stream()
+                .map(role -> role.toString().toUpperCase())
+                .collect(Collectors.toSet());
 
+        // 1. Check if the endpoint is open to all (either by not having any roles or having the ANYONE role set
+        if (isOpenEndpoint(allowedRoles))
+            return;
+        // 2. Get user and ensure it is not null
+        dk.bugelhartmann.UserDTO user = ctx.attribute("user");
+        if (user == null) {
+            throw new ForbiddenResponse("No user was added from the token");
+        }
+        // 3. See if any role matches
+        if (!userHasAllowedRole(user, allowedRoles))
+            throw new ForbiddenResponse("User was not authorized with roles: " + user.getRoles() + ". Needed roles are: " + allowedRoles);
     }
 
 
-    private String createToken(dk.bugelhartmann.UserDTO user) {
+    private String createToken(UserDTO user) {
         try {
             String ISSUER;
             String TOKEN_EXPIRE_TIME;
