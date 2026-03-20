@@ -6,6 +6,8 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import app.entities.Roles;
+import org.mindrot.jbcrypt.BCrypt;
 @Data
 @Getter
 @NoArgsConstructor
@@ -21,6 +23,8 @@ public class User
     private String name;
     private String email;
     private String password;
+
+    Set<Roles>roles = new HashSet<>();
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "privacy_settings_id")
     private PrivacySettings privacySettings;
@@ -34,7 +38,16 @@ public class User
     @Builder.Default
     private Set<Comment> comments = new HashSet<>();
 
+    public User(String name, String password, String email){
+        String salt = BCrypt.gensalt(12);
+        String hashedPassword = BCrypt.hashpw(password,salt);
 
+        this.name = name;
+        this.email = email;
+        this.password =hashedPassword;
+
+        addRole(Roles.USER);
+    }
 
     public void addComment(Comment comment) {
         comments.add(comment);
@@ -50,15 +63,20 @@ public class User
         }
     }
 
+    public boolean verifyPassword(String password){
+        return BCrypt.checkpw(password,this.password);
+    }
 
-
-
+    public void addRole(Roles role){
+       roles.add(role);
+    }
 
 
     @Override
     public String toString() {
         return "User: " +  name + "\n" +
                 "Email: " + email + "\n" +
-                "Password: " + password;
+                "Password: " + password + "\n" +
+                "Roles: " + roles.toString();
     }
 }
