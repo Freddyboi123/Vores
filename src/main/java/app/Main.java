@@ -21,14 +21,9 @@ public class Main {
 
 
     public static void main(String[] args) {
-    UserDAO userDAO = new UserDAO(emf);
 
-    User user1 = new User("Frederik", "realPassword","Fred@dk.dk");
-    User user2 = new User("Oliver", "realPassword","Oli@dk.dk");
-    userDAO.createUser(user1);
-    userDAO.createUser(user2);
 
-    User finalUser = userDAO.addRoleToUser(1,Roles.ADMIN);
+
 
 
 }}

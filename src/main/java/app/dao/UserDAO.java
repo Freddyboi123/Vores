@@ -1,15 +1,17 @@
 package app.dao;
 
+import app.config.security.ISecurityDAO;
 import app.entities.Roles;
 import app.entities.User;
+import io.javalin.validation.ValidationException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
-import java.sql.SQLException;
+import javax.management.relation.Role;
 
-public class UserDAO {
+public class UserDAO implements ISecurityDAO {
 
     private EntityManagerFactory emf;
 
@@ -17,6 +19,7 @@ public class UserDAO {
         this.emf = emf;
     }
 
+    @Override
     public User createUser(User user) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -26,11 +29,19 @@ public class UserDAO {
         return user;
     }
 
-    public User getVerifiedUser(String email){
+    @Override
+    public User getVerifiedUser(String email, String password){
         try(EntityManager em = emf.createEntityManager()){
             em.getTransaction().begin();
             TypedQuery<User> query =  em.createQuery("SELECT u FROM User u WHERE u.email = :userEmail", User.class);
             query.setParameter("userEmail",email);
+            User foundUser = query.getSingleResult();
+
+            if (foundUser.verifyPassword(password)){
+                return foundUser;
+            } else {
+                throw new ValidationException("User could not be validated");
+            }
             return query.getSingleResult();
         } catch (NoResultException e) {
             System.out.println("No user was found with the email: " + email);
@@ -38,12 +49,13 @@ public class UserDAO {
         }
         }
 
-        public User addRoleToUser(int id, Roles role){
+        @Override
+        public User addUserRole(int id, Roles role){
         User user = null;
         try(EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             user = getUserById(id);
-//&& user.getRoles().contains(role)
+
             if (user != null && !user.getRoles().contains(role)) {
 
                 user.addRole(role);
@@ -104,4 +116,10 @@ public class UserDAO {
             System.out.println("User successfully deleted with id " + id);
         }
     }
+
+    @Override
+    public Role createRole(String role) {
+        return null;
+    }
+
 }
