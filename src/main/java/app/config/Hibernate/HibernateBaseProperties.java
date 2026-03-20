@@ -1,4 +1,4 @@
-package app.config;
+package app.config.Hibernate;
 
 import java.util.Properties;
 
