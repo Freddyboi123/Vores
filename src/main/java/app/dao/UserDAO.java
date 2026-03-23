@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class UserDAO implements ISecurityDAO {
 
-    private EntityManagerFactory emf;
+    private final EntityManagerFactory emf;
 
     public UserDAO(EntityManagerFactory emf) {
         this.emf = emf;
@@ -31,11 +31,11 @@ public class UserDAO implements ISecurityDAO {
     }
 
     @Override
-    public User getVerifiedUser(String username, String password){
+    public User getVerifiedUser(String email, String password){
         try(EntityManager em = emf.createEntityManager()){
             em.getTransaction().begin();
-            TypedQuery<User> query =  em.createQuery("SELECT u FROM User u WHERE u.email = :username", User.class);
-            query.setParameter("userEmail",username);
+            TypedQuery<User> query =  em.createQuery("SELECT u FROM User u WHERE u.email = :userEmail", User.class);
+            query.setParameter("userEmail",email);
             User foundUser = query.getSingleResult();
 
             if (foundUser.verifyPassword(password)){
@@ -44,7 +44,7 @@ public class UserDAO implements ISecurityDAO {
                 throw new ValidationException(Map.of());
             }
         } catch (NoResultException e) {
-            System.out.println("No user was found with the username: " + username);
+            System.out.println("No user was found with the email: " + email);
             return null;
         }
         }
@@ -61,7 +61,7 @@ public class UserDAO implements ISecurityDAO {
                 user.addRole(role);
                 em.merge(user);
                 em.getTransaction().commit();
-                System.out.println(user.getName() + " has now been assigned the role: " + role);
+                System.out.println(user.getUsername() + " has now been assigned the role: " + role);
             } else {
                 System.out.println("this user either does not exist or already have this role");
                 return null;
@@ -92,7 +92,7 @@ public class UserDAO implements ISecurityDAO {
             em.getTransaction().begin();
             u = getUserById(id);
         if(u != null){
-            u.setName(name);
+            u.setUsername(name);
             u.setEmail(email);
             u.setPassword(password);
 

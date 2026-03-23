@@ -1,20 +1,16 @@
 package app.controllers;
 
-import app.config.Hibernate.HibernateConfig;
 import app.config.security.ISecurityController;
+import app.config.security.ITokenSecurity;
+import app.config.security.TokenSecurity;
+import app.config.security.TokenVerificationException;
 import app.dao.UserDAO;
-
-
 import app.dto.UserDTO;
 import app.entities.User;
 import app.exeptions.ApiException;
 import app.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dk.bugelhartmann.ITokenSecurity;
-import dk.bugelhartmann.TokenSecurity;
-import dk.bugelhartmann.TokenVerificationException;
-//import dk.bugelhartmann.UserDTO;
 import io.javalin.http.Context;
 import io.javalin.http.ForbiddenResponse;
 import io.javalin.http.HttpStatus;
@@ -32,24 +28,25 @@ public class SecurityController implements ISecurityController {
     private EntityManagerFactory emf;
     private ObjectMapper objectMapper = new ObjectMapper();
     private ITokenSecurity tokenSecurity = new TokenSecurity();
-
+    private UserDAO userDAO;
     public SecurityController(EntityManagerFactory emf){
         this.emf = emf;
+        this.userDAO = new UserDAO(emf);
     }
 
-    UserDAO userDAO = new UserDAO(emf);
+
 
     @Override
     public void login(Context ctx) {
         UserDTO user = ctx.bodyAsClass(UserDTO.class);
         try{
-            User userEntity = userDAO.getVerifiedUser(user.getUsername(), user.getPassword());
-            String token = createToken(new UserDTO(userEntity.getName(),userEntity.getRolesAsString(),userEntity.getEmail()));
+            User userEntity = userDAO.getVerifiedUser(user.getEmail(), user.getPassword());
+            String token = createToken(new UserDTO(userEntity.getUsername(),userEntity.getPassword(),userEntity.getRolesAsString(),userEntity.getEmail()));
             ObjectNode node = objectMapper.createObjectNode();
 
             ctx.status(200).json(node
                     .put("token",token)
-                    .put("username",userEntity.getName()));
+                    .put("username",userEntity.getUsername()));
         } catch (ValidationException ex) {
             throw new ApiException(401, ex.getMessage());
         }
@@ -57,6 +54,7 @@ public class SecurityController implements ISecurityController {
 
     @Override
     public void register(Context ctx) {
+        System.out.println(this.emf.getName());
         UserDTO user = ctx.bodyAsClass(UserDTO.class);
         userDAO.createUser(new User (user.getUsername(), user.getPassword(),user.getEmail()));
         ObjectNode node = objectMapper.createObjectNode();
@@ -77,7 +75,7 @@ public class SecurityController implements ISecurityController {
             return;
 
         // If there is no token we do not allow entry
-        dk.bugelhartmann.UserDTO verifiedTokenUser = validateAndGetUserFromToken(ctx);
+        UserDTO verifiedTokenUser = validateAndGetUserFromToken(ctx);
         ctx.attribute("user", verifiedTokenUser); // -> ctx.attribute("user") in ApplicationConfig beforeMatched filter
     }
 
@@ -92,7 +90,7 @@ public class SecurityController implements ISecurityController {
         if (isOpenEndpoint(allowedRoles))
             return;
         // 2. Get user and ensure it is not null
-        dk.bugelhartmann.UserDTO user = ctx.attribute("user");
+        UserDTO user = ctx.attribute("user");
         if (user == null) {
             throw new ForbiddenResponse("No user was added from the token");
         }
@@ -152,16 +150,16 @@ public class SecurityController implements ISecurityController {
         return false;
     }
 
-    private dk.bugelhartmann.UserDTO validateAndGetUserFromToken(Context ctx) {
+    private UserDTO validateAndGetUserFromToken(Context ctx) {
         String token = getToken(ctx);
-        dk.bugelhartmann.UserDTO verifiedTokenUser = verifyToken(token);
+        UserDTO verifiedTokenUser = verifyToken(token);
         if (verifiedTokenUser == null) {
             throw new UnauthorizedResponse("Invalid user or token"); // UnauthorizedResponse is javalin 6 specific but response is not json!
         }
         return verifiedTokenUser;
     }
 
-    private dk.bugelhartmann.UserDTO verifyToken(String token) {
+    private UserDTO verifyToken(String token) {
         boolean IS_DEPLOYED = (System.getenv("DEPLOYED") != null);
         String SECRET = IS_DEPLOYED ? System.getenv("SECRET_KEY") : Utils.getPropertyValue("SECRET_KEY", "config.properties");
 
@@ -177,7 +175,7 @@ public class SecurityController implements ISecurityController {
         }
     }
 
-    private static boolean userHasAllowedRole(dk.bugelhartmann.UserDTO user, Set<String> allowedRoles) {
+    private static boolean userHasAllowedRole(UserDTO user, Set<String> allowedRoles) {
         return user.getRoles().stream()
                 .anyMatch(role -> allowedRoles.contains(role.toUpperCase()));
     }

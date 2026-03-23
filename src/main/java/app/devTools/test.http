@@ -1,0 +1,19 @@
+
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "Frederik",
+  "password": "1234",
+  "email": "Fred@dk.dk"
+}
+
+###
+POST http://localhost:7070/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "Frederik",
+  "password": "1234",
+  "email": "Fred@dk.dk"
+}

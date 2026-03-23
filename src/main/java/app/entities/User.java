@@ -20,7 +20,7 @@ public class User
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String name;
+    private String username;
     private String email;
     private String password;
 
@@ -38,11 +38,11 @@ public class User
     @Builder.Default
     private Set<Comment> comments = new HashSet<>();
 
-    public User(String name, String password, String email){
+    public User(String username, String password, String email){
         String salt = BCrypt.gensalt(12);
         String hashedPassword = BCrypt.hashpw(password,salt);
 
-        this.name = name;
+        this.username = username;
         this.email = email;
         this.password =hashedPassword;
 
@@ -87,7 +87,7 @@ public class User
 
     @Override
     public String toString() {
-        return "User: " +  name + "\n" +
+        return "User: " +  username + "\n" +
                 "Email: " + email + "\n" +
                 "Password: " + password + "\n" +
                 "Roles: " + roles.toString();

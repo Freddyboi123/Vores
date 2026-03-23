@@ -13,9 +13,11 @@ public class Routes {
     ObjectMapper objectMapper = new ObjectMapper();
 
     SecurityController securityController;
+    EntityManagerFactory emf;
 
     public Routes(EntityManagerFactory emf){
-        securityController = new SecurityController(emf);
+        this.emf = emf;
+        this.securityController = new SecurityController(emf);
     }
 
     public EndpointGroup getRouteResource(String resourceName) {
