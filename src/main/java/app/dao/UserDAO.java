@@ -1,17 +1,26 @@
 package app.dao;
 
+import app.config.security.ISecurityDAO;
+import app.entities.Roles;
 import app.entities.User;
+import io.javalin.validation.ValidationException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
 
-public class UserDAO {
+import javax.management.relation.Role;
+import java.util.Map;
 
-    private EntityManagerFactory emf;
+public class UserDAO implements ISecurityDAO {
+
+    private final EntityManagerFactory emf;
 
     public UserDAO(EntityManagerFactory emf) {
         this.emf = emf;
     }
 
+    @Override
     public User createUser(User user) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -21,7 +30,46 @@ public class UserDAO {
         return user;
     }
 
-    public User getUser(int id) {
+    @Override
+    public User getVerifiedUser(String email, String password){
+        try(EntityManager em = emf.createEntityManager()){
+            em.getTransaction().begin();
+            TypedQuery<User> query =  em.createQuery("SELECT u FROM User u WHERE u.email = :userEmail", User.class);
+            query.setParameter("userEmail",email);
+            User foundUser = query.getSingleResult();
+
+            if (foundUser.verifyPassword(password)){
+                return foundUser;
+            } else {
+                throw new ValidationException(Map.of());
+            }
+        } catch (NoResultException e) {
+            System.out.println("No user was found with the email: " + email);
+            return null;
+        }
+        }
+
+        @Override
+        public User addUserRole(int id, Roles role){
+        User user = null;
+        try(EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            user = getUserById(id);
+
+            if (user != null && !user.getRoles().contains(role)) {
+
+                user.addRole(role);
+                em.merge(user);
+                em.getTransaction().commit();
+                System.out.println(user.getUsername() + " has now been assigned the role: " + role);
+            } else {
+                System.out.println("this user either does not exist or already have this role");
+                return null;
+            }
+
+        }return user;
+    }
+    public User getUserById(int id) {
         User user = null;
         try(EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -42,9 +90,9 @@ public class UserDAO {
         try (EntityManager em = emf.createEntityManager())
         {
             em.getTransaction().begin();
-            u = getUser(id);
+            u = getUserById(id);
         if(u != null){
-            u.setName(name);
+            u.setUsername(name);
             u.setEmail(email);
             u.setPassword(password);
 
@@ -68,4 +116,10 @@ public class UserDAO {
             System.out.println("User successfully deleted with id " + id);
         }
     }
+
+    @Override
+    public Role createRole(String role) {
+        return null;
+    }
+
 }
