@@ -38,6 +38,10 @@ public final class HibernateConfig {
 
     private static void setDeployedProperties(Properties props) {
         System.out.println("DB_NAME = " + System.getenv("DB_NAME"));
+        System.out.println("DB_URL = " + System.getenv("DB_URL"));
+        System.out.println("DB_HOST = " + System.getenv("DB_HOST"));
+        System.out.println("DB_PORT = " + System.getenv("DB_PORT"));
+
         String dbName = System.getenv("DB_NAME");
         props.setProperty("hibernate.connection.url", System.getenv("CONNECTION_STR") + dbName);
         props.setProperty("hibernate.connection.username", System.getenv("DB_USERNAME"));
