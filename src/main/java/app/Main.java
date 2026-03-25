@@ -14,8 +14,11 @@ public class Main {
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
 
         public static void main(String[] args) {
+            System.out.println("DB_NAME=" + System.getenv("DB_NAME"));
+
             UserDAO userDAO = new UserDAO(emf);
             userDAO.createUser(new User("Peter","1234","Peter@dk.dk"));
+
 
             Routes routes = new Routes(emf);
             new ApplicationConfig(emf)
