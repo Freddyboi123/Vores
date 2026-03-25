@@ -43,7 +43,7 @@ public final class HibernateConfig {
         System.out.println("DB_PORT = " + System.getenv("DB_PORT"));
 
         String dbName = System.getenv("DB_NAME");
-        props.setProperty("hibernate.connection.url", System.getenv("CONNECTION_STR") + dbName);
+        props.setProperty("hibernate.connection.url", "jdbc:postgresql://localhost:5432/" + dbName);
         props.setProperty("hibernate.connection.username", System.getenv("DB_USERNAME"));
         props.setProperty("hibernate.connection.password", System.getenv("DB_PASSWORD"));
     }
