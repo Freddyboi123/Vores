@@ -39,9 +39,7 @@ public final class HibernateConfig {
     private static void setDeployedProperties(Properties props) {
         System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         System.out.println("DB_NAME = " + System.getenv("DB_NAME"));
-        System.out.println("DB_URL = " + System.getenv("DB_URL"));
-        System.out.println("DB_HOST = " + System.getenv("DB_HOST"));
-        System.out.println("DB_PORT = " + System.getenv("DB_PORT"));
+        
 
         String dbName = System.getenv("DB_NAME");
         props.setProperty("hibernate.connection.url", "jdbc:postgresql://db:5432/" + dbName);
@@ -51,10 +49,6 @@ public final class HibernateConfig {
 
     private static void setDevProperties(Properties props) {
         System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        System.out.println("DB_NAME = " + System.getenv("DB_NAME"));
-        System.out.println("DB_URL = " + System.getenv("DB_URL"));
-        System.out.println("DB_HOST = " + System.getenv("DB_HOST"));
-        System.out.println("DB_PORT = " + System.getenv("DB_PORT"));
         String dbName = Utils.getPropertyValue("DB_NAME", "config.properties");
         String username = Utils.getPropertyValue("DB_USERNAME", "config.properties");
         String password = Utils.getPropertyValue("DB_PASSWORD", "config.properties");

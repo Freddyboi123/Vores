@@ -1,3 +1,6 @@
+GET http://localhost:7070/api/msg/hello
+
+###
 
 POST http://localhost:7070/api/auth/register
 Content-Type: application/json
