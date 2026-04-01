@@ -24,7 +24,7 @@ public class Routes {
         return switch (resourceName.toLowerCase()) {
             case "msg" -> () -> path("msg", () -> {
                 ObjectNode on = objectMapper.createObjectNode();
-                on.put("msg", "Hello World from your new and correct Java Project, now with WatchTower. WUHU watchtower is working!");
+                on.put("msg", "Hello World from your new and correct Java Project, now with WatchTower. WUHU watchtower is working!, nowtissemand");
                 get("hello", ctx -> ctx.json(on));
                 post("echo", ctx -> ctx.result(ctx.body()));
             });
