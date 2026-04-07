@@ -57,4 +57,17 @@ public class UserController {
 
         ctx.status(200).json(new UserDTO(updatedUser));
     }
+
+    public void createUser( Context ctx) {
+        User tempUser = ctx.bodyAsClass(User.class);
+
+        User user = new User(
+                tempUser.getUsername(),
+                tempUser.getPassword(),
+                tempUser.getEmail()
+        );
+        userDAO.createUser(user);
+        ctx.json(user);
+        ctx.status(200);
+    }
 }

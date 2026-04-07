@@ -17,4 +17,13 @@ Content-Type: application/json
   "password": "12345678",
   "email": "Frededv@dk.dk"
 }
+###
+POST {{baseURL}}createUser
+Content-Type: application/json
 
+{
+  "id": 1,
+  "username": "Mads mikkelsen",
+  "password": "12345678",
+  "email": "Mads@dk.dk"
+}

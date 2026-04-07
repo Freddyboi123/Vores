@@ -46,8 +46,9 @@ public class Routes {
 
                 get("getAll", userController::getAllUsers);
                 get("getUser/{id}", userController::getUserByID);
-                delete("deleteUser/{id}",userController::deleteUserByID);
+                post("createUser",userController::createUser);
                 post("updateUser/{id}",userController::updateUser);
+                delete("deleteUser/{id}",userController::deleteUserByID);
             });
             case "comments" -> () -> path("comments", () -> {
                 get("getAllCommentFromPost/{id}",commentController::getAllCommentsFromPost);
