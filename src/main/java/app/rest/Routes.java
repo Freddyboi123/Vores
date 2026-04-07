@@ -2,6 +2,7 @@ package app.rest;
 
 import app.config.Hibernate.HibernateConfig;
 import app.controllers.CommentController;
+import app.controllers.DevController;
 import app.controllers.SecurityController;
 import app.controllers.UserController;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,7 @@ public class Routes {
     SecurityController securityController;
     UserController userController;
     CommentController commentController;
+    DevController devController;
     EntityManagerFactory emf;
 
     public Routes(EntityManagerFactory emf){
@@ -24,6 +26,7 @@ public class Routes {
         this.securityController = new SecurityController(emf);
         this.userController = new UserController(emf);
         this.commentController = new CommentController(emf);
+        this.devController = new DevController(emf);
     }
 
     public EndpointGroup getRouteResource(String resourceName) {
@@ -49,6 +52,10 @@ public class Routes {
             case "comments" -> () -> path("comments", () -> {
                 get("getAllCommentFromPost/{id}",commentController::getAllCommentsFromPost);
                 post("updateComment/{id}",commentController::updateComment);
+
+            });
+            case "dev" -> () -> path("dev", () -> {
+                post("pop",devController::runpop);
 
             });
 

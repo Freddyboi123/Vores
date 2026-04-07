@@ -2,6 +2,7 @@ package app.controllers;
 
 import app.dao.CommentDAO;
 import app.dao.UserDAO;
+import app.devTools.Populator;
 import app.dto.CommentDTO;
 import app.entities.Comment;
 import io.javalin.http.Context;
@@ -35,4 +36,6 @@ public class CommentController {
         }
         ctx.status(200).json(updatedComment);
     }
+
+
 }

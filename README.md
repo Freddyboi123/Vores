@@ -26,7 +26,7 @@ Example:
 ## Links
 
 Portfolio website:  
-<LINK>
+https://freddyboi123.github.io/Portfolio/
 
 Project overview video (max 5 min):  
 <LINK>
