@@ -1,7 +1,9 @@
 package app.dto;
 
 import app.entities.Roles;
+import app.entities.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties (ignoreUnknown = true)
 @Getter
 public class UserDTO {
@@ -18,13 +21,13 @@ public class UserDTO {
     private String email;
     private Set<String> roles = new HashSet<>();
 
+    public UserDTO(User user){
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        roles.add(user.getRolesAsString());
 
-
-    public UserDTO(String username, String password, String role) {
-        this.username = username;
-        this.password = password;
-        roles.add(role);
     }
+
     public UserDTO(String username, String password, String role, String email) {
         this.username = username;
         this.password = password;

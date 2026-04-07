@@ -11,11 +11,12 @@ import jakarta.persistence.EntityManagerFactory;
 
 public class Main {
 
-    private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
+    public static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
 
         public static void main(String[] args) {
+
+
             UserDAO userDAO = new UserDAO(emf);
-            userDAO.createUser(new User("Peter","1234","Peter@dk.dk"));
             Routes routes = new Routes(emf);
             new ApplicationConfig(emf)
                     .security()
@@ -24,6 +25,8 @@ public class Main {
 //                .route(routes.getRouteResource("open/person"))
                     .route(routes.getRouteResource("msg"))
                     .route(routes.getRouteResource("auth"))
+                    .route(routes.getRouteResource("users"))
+                    .route(routes.getRouteResource("comments"))
 //                .route(() -> {
 //                    path("/index", () -> {
 //                        get("/", ctx -> ctx.render("index.html"));

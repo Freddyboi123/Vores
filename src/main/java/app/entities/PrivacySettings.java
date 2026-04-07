@@ -2,7 +2,7 @@ package app.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+@Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,11 +11,11 @@ import lombok.*;
 @Entity
 public class PrivacySettings {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(mappedBy = "privacySettings")
-    private User userId;
+    @OneToOne
+    @MapsId
+    private User users;
     private boolean isProfilePublic;
     private boolean isPostsPublic;
     private boolean isFriendsListPublic;
@@ -25,6 +25,7 @@ public class PrivacySettings {
         this.isProfilePublic = isProfilePublic;
         this.isPostsPublic = isPostsPublic;
         this.isFriendsListPublic = isFriendsListPublic;
-
     }
+
+
 }

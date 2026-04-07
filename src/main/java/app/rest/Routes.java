@@ -1,7 +1,9 @@
 package app.rest;
 
 import app.config.Hibernate.HibernateConfig;
+import app.controllers.CommentController;
 import app.controllers.SecurityController;
+import app.controllers.UserController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.javalin.apibuilder.EndpointGroup;
@@ -13,11 +15,15 @@ public class Routes {
     ObjectMapper objectMapper = new ObjectMapper();
 
     SecurityController securityController;
+    UserController userController;
+    CommentController commentController;
     EntityManagerFactory emf;
 
     public Routes(EntityManagerFactory emf){
         this.emf = emf;
         this.securityController = new SecurityController(emf);
+        this.userController = new UserController(emf);
+        this.commentController = new CommentController(emf);
     }
 
     public EndpointGroup getRouteResource(String resourceName) {
@@ -33,6 +39,18 @@ public class Routes {
                 post("register", securityController::register);
                 post("login",securityController::login);
             });
+            case "users" -> () -> path("users", () -> {
+
+                get("getAll", userController::getAllUsers);
+                get("getUser/{id}", userController::getUserByID);
+                delete("deleteUser/{id}",userController::deleteUserByID);
+                post("updateUser/{id}",userController::updateUser);
+            });
+            case "comments" -> () -> path("comments", () -> {
+                get("getAllCommentFromPost/{id}",commentController::getAllCommentsFromPost);
+
+            });
+
             default -> throw new IllegalArgumentException("Unknown resource name: " + resourceName);
         };
     }

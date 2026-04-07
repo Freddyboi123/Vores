@@ -1,6 +1,7 @@
 package app.dao;
 
 import app.config.security.ISecurityDAO;
+import app.dto.UserDTO;
 import app.entities.Roles;
 import app.entities.User;
 import io.javalin.validation.ValidationException;
@@ -10,7 +11,10 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
 import javax.management.relation.Role;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UserDAO implements ISecurityDAO {
 
@@ -28,6 +32,11 @@ public class UserDAO implements ISecurityDAO {
             em.getTransaction().commit();
         }
         return user;
+    }
+
+    @Override
+    public Role createRole(String role) {
+        return null;
     }
 
     @Override
@@ -69,6 +78,22 @@ public class UserDAO implements ISecurityDAO {
 
         }return user;
     }
+    public UserDTO getUserDTOById(int id) {
+        User user = null;
+        try(EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            user = em.find(User.class, id);
+            em.getTransaction().commit();
+        }
+        if(user !=  null) {
+            UserDTO userDTO = new UserDTO(user);
+            return userDTO;
+        }
+        else
+            System.out.println("User not found with id " + id);
+            return null;
+    }
+
     public User getUserById(int id) {
         User user = null;
         try(EntityManager em = emf.createEntityManager()) {
@@ -81,27 +106,27 @@ public class UserDAO implements ISecurityDAO {
         }
         else
             System.out.println("User not found with id " + id);
-            return null;
+        return null;
     }
 
-    public User updateUser(int id, String name, String email, String password)
+    public User updateUser(User user)
     {
         User u = null;
         try (EntityManager em = emf.createEntityManager())
         {
             em.getTransaction().begin();
-            u = getUserById(id);
+            u = getUserById(user.getId());
         if(u != null){
-            u.setUsername(name);
-            u.setEmail(email);
-            u.setPassword(password);
+            u.setUsername(user.getUsername());
+            u.setEmail(user.getEmail());
+            u.setPassword(user.getPassword());
 
             em.merge(u);
             em.getTransaction().commit();
-            System.out.println("User successfully updated with id " + id);
+            System.out.println("User successfully updated with id " + user.getId());
         }
         else {
-            System.out.println("failed to updated with id " + id);
+            System.out.println("failed to updated with id " + user.getId());
         }
         }
         return u;
@@ -110,16 +135,32 @@ public class UserDAO implements ISecurityDAO {
     public void deleteUser(int id) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            User user =     em.find(User.class, id);
+            User user = em.find(User.class, id);
+
+            if (user == null){
+                System.out.println("no user found with id: " + id);
+                return;
+            }
+
             em.remove(user);
             em.getTransaction().commit();
             System.out.println("User successfully deleted with id " + id);
         }
     }
 
-    @Override
-    public Role createRole(String role) {
-        return null;
-    }
+    public Set<UserDTO> getAllUsers(){
+        Set<User> dbUsers;
 
+        try (EntityManager em = emf.createEntityManager()) {
+            TypedQuery<User> query =
+                    em.createQuery("SELECT u FROM User u", User.class);
+
+            dbUsers = new HashSet<>(query.getResultList());
+        }
+
+        Set<UserDTO> dataUsers = dbUsers.stream()
+                .map(UserDTO::new)
+                .collect(Collectors.toSet());
+        return dataUsers;
+    }
 }

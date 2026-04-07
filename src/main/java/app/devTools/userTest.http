@@ -1,0 +1,20 @@
+@baseURL = http://localhost:7072/api/users/
+
+###
+GET {{baseURL}}getAll
+###
+GET {{baseURL}}getUser/2
+###
+DELETE {{baseURL}}deleteUser/1
+###
+
+POST {{baseURL}}updateUser/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "username": "Frederik Edvardsen",
+  "password": "12345678",
+  "email": "Frededv@dk.dk"
+}
+

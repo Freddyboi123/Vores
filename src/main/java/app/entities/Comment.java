@@ -27,12 +27,20 @@ public class Comment {
     private Integer likesCount;
     private Integer dislikesCount;
 
-    public Comment(String commentContent, User user, Post post) {
+    public Comment(String commentContent, User user) {
         this.commentContent = commentContent;
         this.user = user;
-        this.post = post;
+        this.likesCount = 0;
+        this.dislikesCount = 0;
     }
 
-}
+    public void setPost(Post post) {
+        this.post = post;
+        if (post != null) {
+            post.getComments().add(this);
+        }
+    }
+    }
+
 
 

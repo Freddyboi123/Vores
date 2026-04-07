@@ -36,6 +36,45 @@ public class Post {
     )
     private Set<Comment> comments = new HashSet<>();
 
-    public Post(String postContent, User user) {}
+    public Post(String postContent) {
+        this.postContent = postContent;
+        this.likesCount = 0;
+        this.dislikesCount = 0;
+        this.commentsCount = 0;
+    }
+
+    public Post(String postContent, int likesCount, int dislikesCount) {
+        this.postContent = postContent;
+
+        this.likesCount = likesCount;
+        this.dislikesCount = dislikesCount;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void addComment(Comment comment) {
+        if (comments == null) {
+            comments = new HashSet<>();
+        }
+
+        comments.add(comment);
+        comment.setPost(this);
+    }
+
+    public void removeComment(Comment comment) {
+        comments.remove(comment);
+        comment.setPost(null);
+    }
+
+
+    public void likePost(){
+        this.likesCount ++;
+    }
+    public void dislikePost(){
+        this.dislikesCount ++;
+    }
+
 
 }

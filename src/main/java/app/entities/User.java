@@ -1,5 +1,6 @@
 package app.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,8 +16,23 @@ import org.mindrot.jbcrypt.BCrypt;
 @Builder
 @Entity
 @Table(name = "users")
+@JsonIgnoreProperties (ignoreUnknown = true)
 public class User
 {
+    //used to create users
+    public User(String username, String password, String email){
+        String salt = BCrypt.gensalt(12);
+        String hashedPassword = BCrypt.hashpw(password,salt);
+
+
+        this.username = username;
+        this.email = email;
+        this.password =hashedPassword;
+
+        addRole(Roles.USER);
+    }
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -25,8 +41,8 @@ public class User
     private String password;
 
     Set<Roles>roles = new HashSet<>();
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "privacy_settings_id")
+
+    @OneToOne(mappedBy = "users",cascade = CascadeType.ALL, orphanRemoval = true)
     private PrivacySettings privacySettings;
 
 
@@ -38,17 +54,6 @@ public class User
     @Builder.Default
     private Set<Comment> comments = new HashSet<>();
 
-    public User(String username, String password, String email){
-        String salt = BCrypt.gensalt(12);
-        String hashedPassword = BCrypt.hashpw(password,salt);
-
-        this.username = username;
-        this.email = email;
-        this.password =hashedPassword;
-
-        addRole(Roles.USER);
-    }
-
 
     public void addComment(Comment comment) {
         comments.add(comment);
@@ -58,10 +63,11 @@ public class User
     }
 
     public void addPost(Post post) {
-        posts.add(post);
-        if (post != null){
-            post.setUser(this);
+        if (posts == null) {
+            posts = new HashSet<>();
         }
+        posts.add(post);
+        post.setUser(this);
     }
 
     public boolean verifyPassword(String password){
@@ -82,8 +88,13 @@ public class User
         return rolesAsString;
     }
 
+    public void addPrivacySettings(PrivacySettings privacySettings){
+        this.privacySettings = privacySettings;
 
-
+        if (privacySettings != null) {
+            privacySettings.setUsers(this); // VERY IMPORTANT
+        }
+    }
 
     @Override
     public String toString() {
