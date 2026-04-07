@@ -42,7 +42,7 @@ public class CommentDAO {
         return null;
     }
 
-    public Comment updateComment(CommentDTO comment)
+    public CommentDTO updateComment(CommentDTO comment)
     {
         Comment c = null;
         try (EntityManager em = emf.createEntityManager())
@@ -59,7 +59,7 @@ public class CommentDAO {
                 System.out.println("failed to updated Comment with id " + comment.getCommentID());
             }
         }
-        return c;
+        return comment;
     }
 
     public void deleteComment(int id) {

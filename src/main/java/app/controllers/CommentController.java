@@ -28,11 +28,11 @@ public class CommentController {
     public void updateComment(Context ctx) {
         CommentDTO comment = ctx.bodyAsClass(CommentDTO.class);
 
-        Comment updatedComment = commentDAO.updateComment(comment);
+        CommentDTO updatedComment = commentDAO.updateComment(comment);
         if ( updatedComment == null) {
             ctx.status(404).json(Map.of("error", "Comment not found"));
             return;
         }
-        ctx.status(200).json(new CommentDTO(updatedComment));
+        ctx.status(200).json(updatedComment);
     }
 }
