@@ -9,6 +9,7 @@ import lombok.*;
 
 @Setter
 @Getter
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CommentDTO {
     int commentID;
@@ -16,6 +17,8 @@ public class CommentDTO {
     int upVotes;
     int downVotes;
     UserDTO user;
+
+    public CommentDTO(){}
 
     public CommentDTO(Comment comment){
         this.commentID = comment.getCommentId();

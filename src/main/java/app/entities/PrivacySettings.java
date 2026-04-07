@@ -1,5 +1,6 @@
 package app.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 @Setter
@@ -15,7 +16,8 @@ public class PrivacySettings {
 
     @OneToOne
     @MapsId
-    private User users;
+    @JsonIgnore
+    private User user;
     private boolean isProfilePublic;
     private boolean isPostsPublic;
     private boolean isFriendsListPublic;

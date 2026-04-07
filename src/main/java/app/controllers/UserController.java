@@ -40,7 +40,6 @@ public class UserController {
     public void updateUser(Context ctx) {
         User tempUser = ctx.bodyAsClass(User.class);
 
-        // constructor handles hashing
         User user = new User(
                 tempUser.getUsername(),
                 tempUser.getEmail(),

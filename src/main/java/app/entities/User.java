@@ -1,5 +1,6 @@
 package app.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -42,16 +43,18 @@ public class User
 
     Set<Roles>roles = new HashSet<>();
 
-    @OneToOne(mappedBy = "users",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
     private PrivacySettings privacySettings;
 
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     @Builder.Default
+
     private Set<Post> posts = new HashSet<>();
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     @Builder.Default
+
     private Set<Comment> comments = new HashSet<>();
 
 
@@ -92,7 +95,7 @@ public class User
         this.privacySettings = privacySettings;
 
         if (privacySettings != null) {
-            privacySettings.setUsers(this); // VERY IMPORTANT
+            privacySettings.setUser(this);
         }
     }
 

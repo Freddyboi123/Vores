@@ -42,21 +42,21 @@ public class CommentDAO {
         return null;
     }
 
-    public Comment updateComment(int id, String postContent)
+    public Comment updateComment(CommentDTO comment)
     {
         Comment c = null;
         try (EntityManager em = emf.createEntityManager())
         {
             em.getTransaction().begin();
-            c = getComment(id);
+            c = getComment(comment.getCommentID());
             if(c != null){
-                c.setCommentContent(postContent);
+                c.setCommentContent(comment.getBody());
                 em.merge(c);
                 em.getTransaction().commit();
-                System.out.println("Comment successfully updated with id " + id);
+                System.out.println("Comment successfully updated with id " + comment.getCommentID());
             }
             else {
-                System.out.println("failed to updated Comment with id " + id);
+                System.out.println("failed to updated Comment with id " + comment.getCommentID());
             }
         }
         return c;

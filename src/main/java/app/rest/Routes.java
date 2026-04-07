@@ -48,6 +48,7 @@ public class Routes {
             });
             case "comments" -> () -> path("comments", () -> {
                 get("getAllCommentFromPost/{id}",commentController::getAllCommentsFromPost);
+                post("updateComment/{id}",commentController::updateComment);
 
             });
 

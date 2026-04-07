@@ -6,7 +6,9 @@ import app.dto.CommentDTO;
 import app.entities.Comment;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
 import java.util.Set;
 
 public class CommentController {
@@ -21,5 +23,16 @@ public class CommentController {
         Set<CommentDTO> allComments = commentDAO.getAllCommentsFromPost(id);
         ctx.json(allComments);
         ctx.status(200);
+    }
+
+    public void updateComment(Context ctx) {
+        CommentDTO comment = ctx.bodyAsClass(CommentDTO.class);
+
+        Comment updatedComment = commentDAO.updateComment(comment);
+        if ( updatedComment == null) {
+            ctx.status(404).json(Map.of("error", "Comment not found"));
+            return;
+        }
+        ctx.status(200).json(new CommentDTO(updatedComment));
     }
 }

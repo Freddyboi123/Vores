@@ -2,4 +2,10 @@
 ###
 GET {{baseURL}}getAllCommentFromPost/1
 ###
-GET
+POST {{baseURL}}updateComment/1
+Content-Type: application/json
+
+{
+  "commentID": 1,
+  "body": "det kan jeg kun give dig ret i!!!!!!!"
+}
