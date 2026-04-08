@@ -12,11 +12,12 @@ import lombok.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CommentDTO {
-    int commentID;
-    String body;
-    int upVotes;
-    int downVotes;
-    UserDTO user;
+    private int commentID;
+    private String body;
+    private int upVotes;
+    private int downVotes;
+    private int userId;
+    private int postId;
 
     public CommentDTO(){}
 
@@ -25,7 +26,7 @@ public class CommentDTO {
         this.body = comment.getCommentContent();
         this.upVotes = comment.getLikesCount();
         this.downVotes = comment.getDislikesCount();
-        this.user = new UserDTO(comment.getUser());
+        this.userId = comment.getUser().getId();
     }
 
 }

@@ -7,7 +7,7 @@ import lombok.*;
 import java.awt.*;
 @Setter
 @Getter
-@NoArgsConstructor
+
 @AllArgsConstructor
 @Builder
 @Entity
@@ -37,13 +37,14 @@ public class Comment {
         this.dislikesCount = 0;
     }
 
+    public Comment(){
+        this.likesCount = 0;
+        this.dislikesCount = 0;
+    }
     public void setPost(Post post) {
         this.post = post;
-        if (post != null) {
-            post.getComments().add(this);
-        }
     }
-    }
+}
 
 
 

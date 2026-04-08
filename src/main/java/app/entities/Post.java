@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Setter
 @Getter
-@NoArgsConstructor
+
 @AllArgsConstructor
 @Builder
 @Entity
@@ -35,7 +35,11 @@ public class Post {
             orphanRemoval = true
     )
     private Set<Comment> comments = new HashSet<>();
-
+    public Post() {
+        this.likesCount = 0;
+        this.dislikesCount = 0;
+        this.commentsCount = 0;
+    }
     public Post(String postContent) {
         this.postContent = postContent;
         this.likesCount = 0;
@@ -55,10 +59,6 @@ public class Post {
     }
 
     public void addComment(Comment comment) {
-        if (comments == null) {
-            comments = new HashSet<>();
-        }
-
         comments.add(comment);
         comment.setPost(this);
     }

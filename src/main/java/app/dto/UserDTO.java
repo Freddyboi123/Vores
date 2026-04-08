@@ -16,6 +16,7 @@ import java.util.Set;
 @JsonIgnoreProperties (ignoreUnknown = true)
 @Getter
 public class UserDTO {
+
     private String username;
     private String password;
     private String email;

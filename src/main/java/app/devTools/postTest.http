@@ -1,0 +1,9 @@
+@baseURL = http://localhost:7072/api/posts/
+
+POST {{baseURL}}createPost
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "postContent": "Hvor er det dog en dejlig dag!"
+}

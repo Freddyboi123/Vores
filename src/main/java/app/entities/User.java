@@ -49,12 +49,12 @@ public class User
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     @Builder.Default
-
+    @JsonIgnore
     private Set<Post> posts = new HashSet<>();
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     @Builder.Default
-
+    @JsonIgnore
     private Set<Comment> comments = new HashSet<>();
 
 

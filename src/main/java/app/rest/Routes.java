@@ -2,10 +2,12 @@ package app.rest;
 
 import app.config.Hibernate.HibernateConfig;
 import app.controllers.*;
+import app.entities.Roles;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.javalin.apibuilder.EndpointGroup;
 import jakarta.persistence.EntityManagerFactory;
+
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 
@@ -41,7 +43,7 @@ public class Routes {
             });
             case "users" -> () -> path("users", () -> {
 
-                get("getAll", userController::getAllUsers);
+                get("getAll", userController::getAllUsers, Roles.USER);
                 get("getUser/{id}", userController::getUserByID);
                 post("createUser",userController::createUser);
                 post("updateUser/{id}",userController::updateUser);
@@ -49,11 +51,12 @@ public class Routes {
             });
             case "comments" -> () -> path("comments", () -> {
                 get("getAllCommentFromPost/{id}",commentController::getAllCommentsFromPost);
+                post("createComment",commentController::createComment);
                 post("updateComment/{id}",commentController::updateComment);
 
             });
-            case "post" -> () -> path("post", () -> {
-                //post("createPost",postController::create);
+            case "posts" -> () -> path("posts", () -> {
+                post("createPost",postController::createPost);
 
             });
 

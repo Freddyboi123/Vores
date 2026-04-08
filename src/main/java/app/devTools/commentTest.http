@@ -9,3 +9,15 @@ Content-Type: application/json
   "commentID": 1,
   "body": "det kan jeg kun give dig ret i!!!!!!!"
 }
+###
+POST {{baseURL}}createComment
+Content-Type: application/json
+
+{
+  "body": "Ej det blæser ret meget her i Gentofte :(",
+  "upVotes": 0,
+  "downVotes": 0,
+  "userId": 1,
+  "postId": 2
+}
+
