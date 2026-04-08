@@ -57,6 +57,7 @@ public class Routes {
             });
             case "posts" -> () -> path("posts", () -> {
                 post("createPost",postController::createPost);
+                get("getNew/{offset}",postController::getNextPosts);
 
             });
 

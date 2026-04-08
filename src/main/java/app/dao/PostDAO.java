@@ -5,6 +5,9 @@ import app.entities.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public class PostDAO {
 
     EntityManagerFactory emf;
@@ -13,6 +16,7 @@ public class PostDAO {
     }
 
     public Post createPost(Post post) {
+        post.setCreatedAt(LocalDateTime.now());
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.persist(post);
@@ -34,6 +38,16 @@ public class PostDAO {
         else
             System.out.println("Post not found with id " + id);
         return null;
+    }
+
+    public List<Post> getLatestPosts(int limit, int offset) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery(
+                            "SELECT p FROM Post p ORDER BY p.createdAt ASC", Post.class)
+                    .setFirstResult(offset)
+                    .setMaxResults(limit)
+                    .getResultList();
+        }
     }
 
     public Post updatePost(int id, String postContent)

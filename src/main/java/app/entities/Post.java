@@ -6,6 +6,7 @@ import org.hibernate.annotations.Comments;
 
 import javax.security.sasl.AuthorizeCallback;
 import java.awt.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,6 +29,7 @@ public class Post {
     private Integer likesCount;
     private Integer dislikesCount;
     private Integer commentsCount;
+    private LocalDateTime createdAt;
 
     @OneToMany(
             mappedBy = "post",
