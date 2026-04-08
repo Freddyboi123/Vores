@@ -19,6 +19,13 @@ public class CommentController {
         this.emf = emf;
         this.commentDAO = new CommentDAO(emf);
     }
+    public void createComment(Context ctx){
+        Comment comment = ctx.bodyAsClass(Comment.class);
+        commentDAO.createComment(comment);
+        ctx.json(comment);
+        ctx.status(201);
+    }
+
     public void getAllCommentsFromPost(Context ctx){
         int id = Integer.parseInt(ctx.pathParam("id"));
         Set<CommentDTO> allComments = commentDAO.getAllCommentsFromPost(id);

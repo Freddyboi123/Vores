@@ -22,7 +22,6 @@ POST {{baseURL}}createUser
 Content-Type: application/json
 
 {
-
   "username": "Mads mikkelsen",
   "password": "12345678",
   "email": "Mads@dk.dk"

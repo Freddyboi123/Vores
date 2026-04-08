@@ -36,7 +36,7 @@ Project overview video (max 5 min):
 <LINK>
 
 Deployed application (optional):  
-<LINK>
+<LINK>  
 
 Source code repository:  
 https://github.com/Freddyboi123/Vores

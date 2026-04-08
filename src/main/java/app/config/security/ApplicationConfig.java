@@ -148,4 +148,13 @@ public class ApplicationConfig {
         );
     }
 
+    public ApplicationConfig routeOverview() {
+        configSteps.add(config ->
+                config.bundledPlugins.enableRouteOverview("/routes")
+        );
+        return this;
+    }
 }
+
+
+

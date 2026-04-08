@@ -20,6 +20,8 @@ public class Main {
             Routes routes = new Routes(emf);
             new ApplicationConfig(emf)
                     .security()
+                    .routeOverview()
+
 //                .route(securityRoutes.getRouteResource("auth"))
 //                .route(securityRoutes.getRouteResource("protected"))
 //                .route(routes.getRouteResource("open/person"))
