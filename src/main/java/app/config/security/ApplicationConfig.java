@@ -154,6 +154,19 @@ public class ApplicationConfig {
         );
         return this;
     }
+
+    public ApplicationConfig fakeAuth() {
+        configSteps.add(config ->
+                config.routes.before(ctx -> {
+                    String userIdHeader = ctx.header("X-User-Id");
+
+                    if (userIdHeader != null) {
+                        ctx.attribute("userId", Long.parseLong(userIdHeader));
+                    }
+                })
+        );
+        return this;
+    }
 }
 
 

@@ -18,6 +18,8 @@ public class Routes {
     UserController userController;
     CommentController commentController;
     PostController postController;
+    FeedController feedController;
+    FriendshipController friendshipController;
     EntityManagerFactory emf;
 
     public Routes(EntityManagerFactory emf){
@@ -26,6 +28,8 @@ public class Routes {
         this.userController = new UserController(emf);
         this.commentController = new CommentController(emf);
         this.postController = new PostController(emf);
+        this.feedController = new FeedController(emf);
+        this.friendshipController = new FriendshipController(emf);
     }
 
     public EndpointGroup getRouteResource(String resourceName) {
@@ -58,6 +62,15 @@ public class Routes {
             case "posts" -> () -> path("posts", () -> {
                 post("createPost",postController::createPost);
                 get("getNew/{offset}",postController::getNextPosts);
+
+            });
+            case "feed" -> () -> path("feed", () -> {
+                get("getNew/{offset}",feedController::getNextPosts);
+
+            });
+            case "friend" -> () -> path("friend", () -> {
+                post("sendReq/{id}",friendshipController::sendRequest);
+                get("getReq/{id}",friendshipController::getRequests);
 
             });
 

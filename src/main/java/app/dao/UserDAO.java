@@ -2,6 +2,7 @@ package app.dao;
 
 import app.config.security.ISecurityDAO;
 import app.dto.UserDTO;
+import app.entities.Friendship;
 import app.entities.Roles;
 import app.entities.User;
 import io.javalin.validation.ValidationException;
@@ -11,6 +12,7 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
 import javax.management.relation.Role;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -94,7 +96,23 @@ public class UserDAO implements ISecurityDAO {
             return null;
     }
 
-    public User getUserById(int id) {
+    public User getUserById(int id ) {
+        User user = null;
+        try(EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            user = em.find(User.class, id);
+            em.getTransaction().commit();
+        }
+        if(user !=  null) {
+            return user;
+        }
+        else
+            System.out.println("User not found with id " + id);
+        return null;
+    }
+
+
+    public User getUserById(Long id ) {
         User user = null;
         try(EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -163,4 +181,5 @@ public class UserDAO implements ISecurityDAO {
                 .collect(Collectors.toSet());
         return dataUsers;
     }
+
 }

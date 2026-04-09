@@ -3,7 +3,6 @@ package app.controllers;
 import app.dao.CommentDAO;
 import app.dao.PostDAO;
 import app.dao.UserDAO;
-import app.devTools.Populator;
 import app.dto.CommentDTO;
 import app.dto.CommentResponseDTO;
 import app.entities.Comment;
@@ -11,7 +10,6 @@ import app.entities.Post;
 import app.entities.User;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Set;

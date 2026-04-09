@@ -21,6 +21,7 @@ public class Main {
             new ApplicationConfig(emf)
                     .security()
                     .routeOverview()
+                    .fakeAuth()
 //                .route(securityRoutes.getRouteResource("auth"))
 //                .route(securityRoutes.getRouteResource("protected"))
 //                .route(routes.getRouteResource("open/person"))
@@ -29,6 +30,8 @@ public class Main {
                     .route(routes.getRouteResource("users"))
                     .route(routes.getRouteResource("comments"))
                     .route(routes.getRouteResource("posts"))
+                    .route(routes.getRouteResource("feed"))
+                    .route(routes.getRouteResource("friend"))
 //                .route(() -> {
 //                    path("/index", () -> {
 //                        get("/", ctx -> ctx.render("index.html"));

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -15,6 +16,7 @@ import java.util.Set;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties (ignoreUnknown = true)
 @Getter
+@Setter
 public class UserDTO {
 
     private String username;
@@ -26,7 +28,6 @@ public class UserDTO {
         this.username = user.getUsername();
         this.email = user.getEmail();
         roles.add(user.getRolesAsString());
-
     }
 
     public UserDTO(String username, String password, String role, String email) {

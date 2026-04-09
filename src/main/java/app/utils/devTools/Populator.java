@@ -1,4 +1,4 @@
-package app.devTools;
+package app.utils.devTools;
 
 import app.config.Hibernate.HibernateConfig;
 import app.dao.CommentDAO;

@@ -18,4 +18,11 @@ public class CommentResponseDTO {
         this.username = comment.getUser().getUsername();
         this.postId = comment.getPost().getPostId();
     }
+
+    public CommentResponseDTO(CommentDTO comment) {
+        this.id = comment.getCommentID();
+        this.body = comment.getBody();
+        this.username = comment.getUsername();
+        this.postId = comment.getPostId();
+    }
 }

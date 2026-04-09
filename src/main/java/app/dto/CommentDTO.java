@@ -14,10 +14,12 @@ import lombok.*;
 public class CommentDTO {
     private int commentID;
     private String body;
+    private String username;
     private int upVotes;
     private int downVotes;
     private int userId;
     private int postId;
+
 
     public CommentDTO(){}
 
@@ -27,6 +29,7 @@ public class CommentDTO {
         this.upVotes = comment.getLikesCount();
         this.downVotes = comment.getDislikesCount();
         this.userId = comment.getUser().getId();
+        this.username = comment.getUser().getUsername();
     }
 
 }

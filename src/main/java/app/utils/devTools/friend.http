@@ -1,0 +1,7 @@
+@baseURL = http://localhost:7072/api/friend/
+###
+POST {{baseURL}}sendReq/2
+X-User-Id: 3
+
+###
+GET {{baseURL}}getReq/2
