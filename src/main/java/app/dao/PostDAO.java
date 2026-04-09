@@ -43,7 +43,7 @@ public class PostDAO {
     public List<Post> getLatestPosts(int limit, int offset) {
         try (EntityManager em = emf.createEntityManager()) {
             return em.createQuery(
-                            "SELECT p FROM Post p ORDER BY p.createdAt ASC", Post.class)
+                            "SELECT p FROM Post p WHERE p.viewability = Viewability.PUBLIC ORDER BY p.createdAt ASC", Post.class)
                     .setFirstResult(offset)
                     .setMaxResults(limit)
                     .getResultList();
@@ -77,6 +77,24 @@ public class PostDAO {
             em.remove(post);
             em.getTransaction().commit();
             System.out.println("Post successfully deleted with id " + id);
+        }
+    }
+
+    public List<Post> getFeedPosts(long userId, List<Long> friendIds, int limit, int offset) {
+        try (EntityManager em = emf.createEntityManager()) {
+
+            return em.createQuery(
+                            "SELECT p FROM Post p WHERE " +
+                                    "p.viewability = :publicVis " +
+                                    "OR (p.viewability = :friendsVis AND p.user.id IN :friendIds) " +
+                                    "ORDER BY p.createdAt DESC",
+                            Post.class)
+                    .setParameter("publicVis", Post.Viewability.PUBLIC)
+                    .setParameter("friendsVis", Post.Viewability.FRIENDS_ONLY)
+                    .setParameter("friendIds", friendIds.isEmpty() ? List.of(-1L) : friendIds)
+                    .setFirstResult(offset)
+                    .setMaxResults(limit)
+                    .getResultList();
         }
     }
 }

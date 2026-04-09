@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 public class CommentDAO {
     EntityManagerFactory emf;
+
     public CommentDAO(EntityManagerFactory emf) {
         this.emf = emf;
     }
@@ -29,33 +30,29 @@ public class CommentDAO {
 
     public Comment getComment(int id) {
         Comment comment = null;
-        try(EntityManager em = emf.createEntityManager()) {
+        try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             comment = em.find(Comment.class, id);
             em.getTransaction().commit();
         }
-        if(comment !=  null) {
+        if (comment != null) {
             return comment;
-        }
-        else
+        } else
             System.out.println("Post not found with id " + id);
         return null;
     }
 
-    public CommentDTO updateComment(CommentDTO comment)
-    {
+    public CommentDTO updateComment(CommentDTO comment) {
         Comment c = null;
-        try (EntityManager em = emf.createEntityManager())
-        {
+        try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             c = getComment(comment.getCommentID());
-            if(c != null){
+            if (c != null) {
                 c.setCommentContent(comment.getBody());
                 em.merge(c);
                 em.getTransaction().commit();
                 System.out.println("Comment successfully updated with id " + comment.getCommentID());
-            }
-            else {
+            } else {
                 System.out.println("failed to updated Comment with id " + comment.getCommentID());
             }
         }
@@ -65,19 +62,26 @@ public class CommentDAO {
     public void deleteComment(int id) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            Comment comment =  em.find(Comment.class, id);
+            Comment comment = em.find(Comment.class, id);
             em.remove(comment);
             em.getTransaction().commit();
             System.out.println("Comment successfully deleted with id " + id);
         }
     }
-    public Set<CommentDTO> getAllCommentsFromPost(int post_id){
+
+    public Set<CommentDTO> getAllCommentsFromPost(int post_id) {
         Set<Comment> dataComments;
 
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<Comment> query =
-                    em.createQuery("SELECT c FROM Comment c WHERE c.post.postId =:post_id", Comment.class);
-            query.setParameter("post_id",post_id);
+                    em.createQuery(
+                            "SELECT c FROM Comment c " +
+                                    "JOIN FETCH c.post " +
+                                    "WHERE c.post.postId = :post_id",
+                            Comment.class
+                    );
+
+            query.setParameter("post_id", post_id);
 
             dataComments = new HashSet<>(query.getResultList());
         }
@@ -85,7 +89,7 @@ public class CommentDAO {
         Set<CommentDTO> postComments = dataComments.stream()
                 .map(CommentDTO::new)
                 .collect(Collectors.toSet());
+
         return postComments;
     }
 }
-

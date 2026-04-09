@@ -66,12 +66,15 @@ public class Routes {
             });
             case "feed" -> () -> path("feed", () -> {
                 get("getNew/{offset}",feedController::getNextPosts);
+                get("getRealPost/{offset}",feedController::getNextPosts);
 
             });
             case "friend" -> () -> path("friend", () -> {
                 post("sendReq/{id}",friendshipController::sendRequest);
                 get("getReq/{id}",friendshipController::getRequests);
-
+                get("getFriends/{id}",friendshipController::getFriends);
+                post("accReg/{id}",friendshipController::accept);
+                post("declineReq/{id}",friendshipController::decline);
             });
 
             default -> throw new IllegalArgumentException("Unknown resource name: " + resourceName);

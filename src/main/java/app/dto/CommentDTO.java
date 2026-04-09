@@ -30,6 +30,7 @@ public class CommentDTO {
         this.downVotes = comment.getDislikesCount();
         this.userId = comment.getUser().getId();
         this.username = comment.getUser().getUsername();
+        this.postId = comment.getPost().getPostId();
     }
 
 }

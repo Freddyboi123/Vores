@@ -31,6 +31,9 @@ public class Post {
     private Integer commentsCount;
     private LocalDateTime createdAt;
 
+    @Enumerated(EnumType.STRING)
+    private Viewability viewability;
+
     @OneToMany(
             mappedBy = "post",
             cascade = CascadeType.ALL,
@@ -58,6 +61,11 @@ public class Post {
 
     public void setUser(User user) {
         this.user = user;
+        if (user.getPrivacySettings().isPostsPublic()){
+            this.viewability = Viewability.PUBLIC;
+        } else {
+            this.viewability = Viewability.FRIENDS_ONLY;
+        }
     }
 
     public void addComment(Comment comment) {
@@ -78,5 +86,10 @@ public class Post {
         this.dislikesCount ++;
     }
 
+    public enum Viewability {
+        PUBLIC,
+        FRIENDS_ONLY,
+        PRIVATE
 
+    }
 }

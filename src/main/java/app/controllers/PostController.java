@@ -37,6 +37,7 @@ public class PostController {
         }
         Post post = new Post();
         post.setUser(user);
+
         post.setPostContent(dto.getPostContent());
 
         postDAO.createPost(post);

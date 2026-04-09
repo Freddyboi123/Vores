@@ -15,9 +15,26 @@ public class FriendshipDAO {
         this.emf = emf;
     }
 
-    public void sendRequest(Long requesterId, Long addresseeId) {
+    public void sendRequest(long requesterId, long addresseeId) {
+        if (requesterId == addresseeId) {
+            throw new IllegalArgumentException("You can't friend yourself");
+        }
+
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
+
+            Long count = em.createQuery(
+                            "SELECT COUNT(f) FROM Friendship f WHERE " +
+                                    "(f.requesterId = :a AND f.addresseeId = :b) OR " +
+                                    "(f.requesterId = :b AND f.addresseeId = :a)",
+                            Long.class)
+                    .setParameter("a", requesterId)
+                    .setParameter("b", addresseeId)
+                    .getSingleResult();
+
+            if (count > 0) {
+                throw new IllegalStateException("Friend request already exists or users are already connected");
+            }
 
             Friendship f = new Friendship();
             f.setRequesterId(requesterId);
@@ -41,7 +58,6 @@ public class FriendshipDAO {
         }
     }
 
-    //Todo convert to int
     public List<Long> getFriends(long userId) {
         try (EntityManager em = emf.createEntityManager()) {
 
@@ -70,6 +86,18 @@ public class FriendshipDAO {
                     .getResultList();
 
             return result;
+        }
+    }
+
+
+    public void declineRequest(long requestId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+
+            Friendship f = em.find(Friendship.class, requestId);
+            f.setStatus(Friendship.Status.DECLINED);
+
+            em.getTransaction().commit();
         }
     }
 }
