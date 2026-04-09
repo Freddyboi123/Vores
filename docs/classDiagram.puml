@@ -1,0 +1,104 @@
+@startuml
+
+!pragma layout smetana
+'https://plantuml.com/class-diagram
+
+skinparam packageStyle rectangle
+top to bottom direction
+
+
+title Vores Øjeblik Class Diagram
+
+' --------------------------------------------------------------------
+' LAYERS
+' --------------------------------------------------------------------
+package "Application Layer" {
+    class Main
+
+}
+
+package "config"{
+    class EntityRegistry
+    class HibernateBaseProperties
+    class HibernateConfig
+    class HibernateEmfBuilder
+
+    package security {
+        class ApplicationConfig
+        interface ISecurityController
+        interface ISecurityDAO
+        interface ITokenSecurity
+        exception TokenCreationException
+        class TokenSecurity
+        exception TokenVerificationException
+    }
+
+package controllers {
+    class CommentController
+    class FeedController
+    class FriendshipController
+    class PostController
+    class SecurityController
+    class UserController
+}
+
+package dao{
+    class CommentDAO
+    class FriendshipDAO
+    class PostDAO
+    class UserDAO
+}
+
+package dto{
+    class CommentDTO
+    class CommentResponseDTO
+    class FriendRequestUserResponseDTO
+    class FullPostDTO
+    class PostDTO
+    class PostResponseDTO
+    class UserDTO
+}
+
+package entities{
+    entity Comment
+    entity Friendship
+    entity Post
+    entity PrivacySettings
+    entity User
+    enum Roles
+
+    package Weather{
+        class GeoData
+        class HourlyForecast
+        class LocationAttributes
+        class WeeklyForecast
+    }
+}
+
+    package exception{
+        class ApiException
+    }
+
+    package rest{
+        class Routes
+    }
+
+    package utils{
+        class Populator
+        class commentTest <<test>>
+        class feed <<test>>
+        class friend <<test>>
+        class postTest <<test>>
+        class test <<test>>
+        class userTest <<test>>
+
+        class ApiService
+        class Utils
+        package WeatherApiHandler {
+                class WeatherApi
+            }
+    }
+    package WeatherApiHandler {
+    }
+}
+@enduml
