@@ -20,16 +20,13 @@ import org.mindrot.jbcrypt.BCrypt;
 @JsonIgnoreProperties (ignoreUnknown = true)
 public class User
 {
-    //used to create users
+
     public User(String username, String password, String email){
         String salt = BCrypt.gensalt(12);
         String hashedPassword = BCrypt.hashpw(password,salt);
-
-
         this.username = username;
         this.email = email;
         this.password =hashedPassword;
-
         addRole(Roles.USER);
     }
 
@@ -74,9 +71,9 @@ public class User
         post.setUser(this);
     }
 
-    public boolean verifyPassword(String password){
-        return BCrypt.checkpw(password,this.password);
-    }
+        public boolean verifyPassword(String password){
+            return BCrypt.checkpw(password,this.password);
+        }
 
     public void addRole(Roles role){
        roles.add(role);
