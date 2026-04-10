@@ -43,38 +43,38 @@ public class Routes {
             case "auth" -> () -> path("auth", () -> {
 
                 post("register", securityController::register);
-                post("login",securityController::login);
+                post("login",securityController::login, Roles.USER);
             });
             case "users" -> () -> path("users", () -> {
 
                 get("getAll", userController::getAllUsers, Roles.USER);
-                get("getUser/{id}", userController::getUserByID);
-                post("createUser",userController::createUser);
-                post("updateUser/{id}",userController::updateUser,Roles.ADMIN);
-                delete("deleteUser/{id}",userController::deleteUserByID);
+                get("getUser/{id}", userController::getUserByID, Roles.USER);
+                post("createUser",userController::createUser, Roles.USER);
+                post("updateUser/{id}",userController::updateUser, Roles.USER);
+                delete("deleteUser/{id}",userController::deleteUserByID, Roles.ADMIN);
             });
             case "comments" -> () -> path("comments", () -> {
-                get("getAllCommentFromPost/{id}",commentController::getAllCommentsFromPost);
-                post("createComment",commentController::createComment);
-                post("updateComment/{id}",commentController::updateComment);
+                get("getAllCommentFromPost/{id}",commentController::getAllCommentsFromPost, Roles.USER);
+                post("createComment",commentController::createComment, Roles.USER);
+                post("updateComment/{id}",commentController::updateComment, Roles.USER);
 
             });
             case "posts" -> () -> path("posts", () -> {
-                post("createPost",postController::createPost);
-                get("getNew/{offset}",postController::getNextPosts);
+                post("createPost",postController::createPost, Roles.USER);
+                get("getNew/{offset}",postController::getNextPosts, Roles.USER);
 
             });
             case "feed" -> () -> path("feed", () -> {
-                get("getNew/{offset}",feedController::getNextPosts);
-                get("getRealPost/{offset}",feedController::getNextPosts);
+                get("getNew/{offset}",feedController::getNextPosts, Roles.USER);
+                get("getRealPost/{offset}",feedController::getNextPosts, Roles.USER);
 
             });
             case "friend" -> () -> path("friend", () -> {
-                post("sendReq/{id}",friendshipController::sendRequest);
-                get("getReq/{id}",friendshipController::getRequests);
-                get("getFriends/{id}",friendshipController::getFriends);
-                post("accReg/{id}",friendshipController::accept);
-                post("declineReq/{id}",friendshipController::decline);
+                post("sendReq/{id}",friendshipController::sendRequest, Roles.USER);
+                get("getReq/{id}",friendshipController::getRequests, Roles.USER);
+                get("getFriends/{id}",friendshipController::getFriends, Roles.USER);
+                post("accReg/{id}",friendshipController::accept, Roles.USER);
+                post("declineReq/{id}",friendshipController::decline, Roles.USER);
             });
 
             default -> throw new IllegalArgumentException("Unknown resource name: " + resourceName);
