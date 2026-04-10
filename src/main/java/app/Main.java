@@ -17,7 +17,7 @@ public class Main {
 
     public static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
 
-        public static void main(String[] args) throws ExecutionException, InterruptedException {
+        public static void main(String[] args) {
             Routes routes = new Routes(emf);
             new ApplicationConfig(emf)
                     .security()
