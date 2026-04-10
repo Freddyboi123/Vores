@@ -50,7 +50,7 @@ public class Routes {
                 get("getAll", userController::getAllUsers, Roles.USER);
                 get("getUser/{id}", userController::getUserByID);
                 post("createUser",userController::createUser);
-                post("updateUser/{id}",userController::updateUser);
+                post("updateUser/{id}",userController::updateUser,Roles.ADMIN);
                 delete("deleteUser/{id}",userController::deleteUserByID);
             });
             case "comments" -> () -> path("comments", () -> {

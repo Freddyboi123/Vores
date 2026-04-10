@@ -3,13 +3,17 @@
 ###
 GET {{baseURL}}getAll
 ###
-GET {{baseURL}}getUser/2
+GET {{baseURL}}getUser/1
 ###
+
+POST {{baseURL}}login
+
 DELETE {{baseURL}}deleteUser/1
 ###
 
 POST {{baseURL}}updateUser/1
 Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
 {
   "id": 1,
@@ -17,6 +21,8 @@ Content-Type: application/json
   "password": "12345678",
   "email": "Frededv@dk.dk"
 }
+
+
 ###
 POST {{baseURL}}createUser
 Content-Type: application/json

@@ -25,7 +25,7 @@ public class WeeklyForcast {
         for (int i = 0; i < units; i++) {
 
             if(i % 24 == 0){
-                System.out.println("\n" + "Day:" + (i/24)+1);
+                System.out.println("\n" + "Day:" + ((i / 24) + 1));
             }
             System.out.println(
                     this.getHourly().getTime().get(i) + " -> " +

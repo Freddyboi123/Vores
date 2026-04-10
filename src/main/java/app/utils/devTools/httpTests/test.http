@@ -17,10 +17,10 @@ Content-Type: application/json
 
 {
   "username": "Frederik",
-  "password": "1234",
-  "email": "Fred@dk.dk"
+  "password": "SolOverGudhejm",
+  "email": "fred@dk.dk"
 }
-
+> {% client.global.set("authToken", response.body.token); %}
 ###
 
 GET http://localhost:7072/api/users/getAll

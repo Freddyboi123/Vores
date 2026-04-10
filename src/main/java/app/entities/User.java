@@ -41,6 +41,7 @@ public class User
     private String email;
     private String password;
 
+    @Enumerated(EnumType.STRING)
     Set<Roles>roles = new HashSet<>();
 
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
@@ -86,8 +87,9 @@ public class User
         String rolesAsString = "";
         for (Roles r : roles){
             String temp = r.toString();
-            rolesAsString += temp;
+            rolesAsString += temp + ",";
         }
+            rolesAsString = rolesAsString.substring(0, rolesAsString.length() - 1);
         return rolesAsString;
     }
 

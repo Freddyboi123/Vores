@@ -154,11 +154,16 @@ and integrity.
 
 ---
 
+# Class diagram
+
+
+---
+
+
 # Data Model
 
 ## ERD
-
-![img_1.png](img_1.png)
+![img_4.png](img_4.png)
 
 Example entities:
 
