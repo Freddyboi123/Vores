@@ -16,15 +16,6 @@ in Denmark. The goal is to create an environment centered around local,
 relevant content and genuine social interaction, rather than global trends
 and click-driven content.
 
-Example:
-> Users can share posts with friends and family
-> 
-> Users can like, dislike, and comment on posts
-> 
-> Privacy settings allow users to control whether content is public or limited to friends
->
-> Users can add friends to build a personal network and stay connected
-
 ---
 
 ## Links
@@ -33,10 +24,10 @@ Portfolio website:
 https://freddyboi123.github.io/Portfolio/
 
 Project overview video (max 5 min):  
-<LINK>
+<https://youtu.be/Y2T6zm_hgIU>
 
 Deployed application (optional):  
-<LINK>  
+<https://security.xn--voresjeblik-kgb.dk/api/routes>  
 
 Source code repository:  
 https://github.com/Freddyboi123/Vores
@@ -254,18 +245,18 @@ This will be used when the front end is complete, to
 build a full entity with the post and all related comments 
 
 ## User Stories
-As a new user, I want to create an account so that I can access the platform.
-As a user, I want to log in with my email and password so that I can securely access my account.
-As a user, I want my password to be securely stored so that my account is protected even if the database is compromised.
-As a user, I want to view my profile so that I can see my information and activity.
-As a user, I want to control my privacy settings so that I can decide who can see my content.
-As a user, I want to create a post so that I can share content with others.
-As a user, I want to view posts from other users so that I can stay updated.
-As a user, I want to comment on posts so that I can interact with others.
-As a user, I want to send a friend request so that I can connect with other users.
-As a user, I want to accept friend requests so that I can build my network.
-As a system, when a user is deleted, I want all related posts and comments to be removed so that the database remains consistent.
-As an admin, I want to access restricted endpoints so that I can manage the system.
-As a system, I want to prevent non-admin users from accessing admin-only functionality.
-As a system, I want to validate user roles from tokens so that only authorized users can perform certain actions.
-As a system, I want relationships between users, posts, and comments to stay consistent so that no orphaned data exists.
+- As a new user, I want to create an account so that I can access the platform.
+- As a user, I want to log in with my email and password so that I can securely access my account.
+- As a user, I want my password to be securely stored so that my account is protected even if the database is compromised.
+- As a user, I want to view my profile so that I can see my information and activity.
+- As a user, I want to control my privacy settings so that I can decide who can see my content.
+- As a user, I want to create a post so that I can share content with others.
+- As a user, I want to view posts from other users so that I can stay updated.
+- As a user, I want to comment on posts so that I can interact with others.
+- As a user, I want to send a friend request so that I can connect with other users.
+- As a user, I want to accept friend requests so that I can build my network.
+- As a system, when a user is deleted, I want all related posts and comments to be removed so that the database remains consistent.
+- As an admin, I want to access restricted endpoints so that I can manage the system.
+- As a system, I want to prevent non-admin users from accessing admin-only functionality.
+- As a system, I want to validate user roles from tokens so that only authorized users can perform certain actions.
+- As a system, I want relationships between users, posts, and comments to stay consistent so that no orphaned data exists.
