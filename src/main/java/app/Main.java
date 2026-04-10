@@ -23,7 +23,6 @@ public class Main {
                     .security()
                     .routeOverview()
                     .fakeAuth()
-                .route(routes.getRouteResource("open/person"))
                     .route(routes.getRouteResource("msg"))
                     .route(routes.getRouteResource("auth"))
                     .route(routes.getRouteResource("users"))
