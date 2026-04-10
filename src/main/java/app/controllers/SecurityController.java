@@ -17,14 +17,17 @@ import io.javalin.http.HttpStatus;
 import io.javalin.http.UnauthorizedResponse;
 import io.javalin.validation.ValidationException;
 import jakarta.persistence.EntityManagerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.util.Set;
+
 import java.util.stream.Collectors;
 
 
 public class SecurityController implements ISecurityController {
-
+    private final Logger logger = LoggerFactory.getLogger(SecurityController.class);
     private EntityManagerFactory emf;
     private ObjectMapper objectMapper = new ObjectMapper();
     private ITokenSecurity tokenSecurity = new TokenSecurity();
@@ -47,7 +50,9 @@ public class SecurityController implements ISecurityController {
             ctx.status(200).json(node
                     .put("token",token)
                     .put("username",userEntity.getUsername()));
+            logger.info("Successful login by user: {} Email: ({})", user.getUsername(), user.getEmail());
         } catch (ValidationException ex) {
+            logger.info("Authentication attempt failed for user: {} Email: ({})", user.getUsername(), user.getEmail());
             throw new ApiException(401, ex.getMessage());
         }
     }

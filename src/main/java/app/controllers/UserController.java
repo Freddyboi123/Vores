@@ -42,8 +42,8 @@ public class UserController {
 
         User user = new User(
                 tempUser.getUsername(),
-                tempUser.getEmail(),
-                tempUser.getPassword()
+                tempUser.getPassword(),
+                tempUser.getEmail()
         );
 
         user.setId(tempUser.getId()); // 🔥 important
